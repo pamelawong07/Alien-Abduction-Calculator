@@ -15,6 +15,8 @@ ApplicationWindow {
     title: qsTr("Alien Encounter Calculator")
     property bool lightMode: Application.styleHints.colorScheme === Qt.Light
     property color aliengreen: "#6cc417"
+    property color lightgreen: "#cfe6ca"
+    property color lightgray: "#ebedeb"
 
     GridLayout {
         id: grid
@@ -34,14 +36,15 @@ ApplicationWindow {
                 id: map
                 //Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                 anchors.fill: parent
-                source: "file:///C:/Users/Pamela/Documents/dsa/qttest2/United-States-Country-Outline.jpg"
+                //picture sourced from https://inkpx.com/templates/6mde/printable-us-map-state-outline-with-names
+                source: "United-States-Country-Outline.jpg"
                 fillMode: Image.PreserveAspectFit
             }
         }
 
         Rectangle {
             id: rectangle2
-            color: "gray"
+            color: lightgreen
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight
@@ -92,8 +95,7 @@ ApplicationWindow {
                     id: query_city
                     text: "Probability of Abduction"
                     font.pointSize: 15
-                    Layout.alignment: Qt.AlignHCenter| Qt.AlignTop
-                    Layout.topMargin: 40
+                    Layout.alignment: Qt.AlignHCenter
                     background: Rectangle{
                         implicitWidth: 150
                         implicitHeight: 36
@@ -102,53 +104,70 @@ ApplicationWindow {
                     onClicked: datatext.text = "hey"
                 }
 
-                RowLayout {
-                    anchors.fill: parent
-                    Layout.alignment: Qt.AlignHCenter
+                Item{
+                    id: switch_row
+                    Layout.alignment: Qt.AlignLeft
                     Layout.topMargin: 60
+                    Layout.leftMargin: 25
 
-                    Button{
-                        id: switch_splay
-                        text: "Splay Tree"
-                        font.pointSize: 10
-                        Layout.alignment: Qt.AlignLeft| Qt.AlignTop
-                        Layout.topMargin: 0
-                        Layout.leftMargin: 20
-                        background: Rectangle{
-                            implicitWidth: 100
-                            implicitHeight: 30
-                            radius: 6
+                    RowLayout {
+                        anchors.fill: parent
+
+                        Button{
+                            id: switch_splay
+                            text: "Splay Tree"
+                            font.pointSize: 15
+                            background: Rectangle{
+                                implicitWidth: 100
+                                implicitHeight: 30
+                                radius: 6
+                            }
+                            onClicked: datatext.text = "im splay"
                         }
-                        onClicked: datatext.text = "im splay"
-                    }
-                    Button{
-                        id: switch_minheap
-                        text: "Minheap"
-                        font.pointSize: 10
-                        Layout.alignment: Qt.AlignRight| Qt.AlignTop
-                        Layout.topMargin: 0
-                        Layout.rightMargin: 20
-                        background: Rectangle{
-                            implicitWidth: 100
-                            implicitHeight: 30
-                            radius: 6
+                        Button{
+                            id: switch_minheap
+                            text: "Minheap"
+                            font.pointSize: 15
+                            background: Rectangle{
+                                implicitWidth: 100
+                                implicitHeight: 30
+                                radius: 6
+                            }
+                            onClicked: datatext.text = "im minheap"
                         }
-                        onClicked: datatext.text = "im minheap"
                     }
                 }
-
-                Rectangle{
-                    width: 250; height: 300
-                    color: "white"
-                    id: container
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                    Layout.bottomMargin: 20
-                    MouseArea{
-                        anchors.fill: parent
+                ColumnLayout{
+                    spacing: 0
+                    Layout.topMargin: 10
+                    Layout.alignment: Qt.AlignHCenter
+                    Rectangle{
+                        width: 250; height: 30
+                        color: lightgray
+                        id: time_box
+                        MouseArea{
+                            anchors.fill: parent
+                        }
+                        Text{
+                            id: timetxt
+                            font.pointSize: 15
+                            text: "TIME: "
+                        }
                     }
-                    Text{
-                        id: datatext
-                        text: "absdkfs"
+
+                    Rectangle{
+                        width: 250; height: 300
+                        color: "white"
+                        id: container
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                        MouseArea{
+                            anchors.fill: parent
+                        }
+                        Text{
+                            id: datatext
+                            font.pointSize: 12
+                            text: "absdkfs"
+                        }
                     }
                 }
             }
