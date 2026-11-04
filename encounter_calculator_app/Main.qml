@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
-
+import frontend_functions
 
 ApplicationWindow {
     id: window
@@ -16,15 +16,18 @@ ApplicationWindow {
     property bool lightMode: Application.styleHints.colorScheme === Qt.Light
     property color aliengreen: "#6cc417"
     property color lightgreen: "#cfe6ca"
+    property color lightergreen: "#e7f5e4"
     property color lightgray: "#ebedeb"
+    property color lightgreengray: "#e0e6df"
 
-    GridLayout {
-        id: grid
-        columns: 2
-        rowSpacing: 0
-        columnSpacing: 0
+    Frontend_functions{
+        id: fe_functions
+    }
+
+    RowLayout {
+        id: ui_row
+        spacing: 0
         anchors.fill: parent
-
         Rectangle {
             id: rectangle1
             color: "white"
@@ -34,10 +37,10 @@ ApplicationWindow {
             Layout.alignment: Qt.AlignLeft
             Image{
                 id: map
-                //Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                 anchors.fill: parent
                 //picture sourced from https://inkpx.com/templates/6mde/printable-us-map-state-outline-with-names
-                source: "United-States-Country-Outline.jpg"
+                source: "qrc:/img/images/United-States-Country-OutlineONLY.png"
+                //source: "qrc:/img/images/test_stockimg.jpg"
                 fillMode: Image.PreserveAspectFit
             }
         }
@@ -54,34 +57,21 @@ ApplicationWindow {
                 anchors.fill: parent
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
 
-                // Button {
-                //     id: button1
-                //     text: window.lightMode ? qsTr("\u263D  Dark mode")
-                //                            : qsTr("\u263C  Light mode")
-                //     Layout.bottomMargin: 16
-                //     Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-
-                //     contentItem: Text {
-                //         text: button1.text
-                //         color: window.lightMode ? window.light : window.dark
-                //         font: button1.font
-                //         horizontalAlignment: Text.AlignHCenter
-                //         verticalAlignment: Text.AlignVCenter
-                //     }
-
-                //     background: Rectangle {
-                //         implicitWidth: 120
-                //         implicitHeight: 36
-                //         radius: 8
-                //         color: window.lightMode ? window.dark : window.light
-                //     }
-
-                //     onClicked: window.lightMode = !window.lightMode
-                // }
+                Button{
+                    id: credits_button
+                    Layout.alignment: Qt.AlignRight| Qt.AlignTop
+                    text: "Credits"
+                    x:parent.width-20
+                    y:parent.height-20
+                    background: Rectangle{
+                        color:"white"
+                    }
+                }
                 Button{
                     id: submit_new
                     text: "Submit new sighting"
                     font.pointSize: 15
+                    font.bold: true
                     Layout.topMargin: 20
                     Layout.alignment: Qt.AlignHCenter| Qt.AlignTop
                     background: Rectangle{
@@ -93,8 +83,9 @@ ApplicationWindow {
                 }
                 Button{
                     id: query_city
-                    text: "Probability of Abduction"
+                    text: "Calculate Probability"
                     font.pointSize: 15
+                    font.bold: true
                     Layout.alignment: Qt.AlignHCenter
                     background: Rectangle{
                         implicitWidth: 150
@@ -103,60 +94,83 @@ ApplicationWindow {
                     }
                     onClicked: datatext.text = "hey"
                 }
-
-                Item{
-                    id: switch_row
-                    Layout.alignment: Qt.AlignLeft
-                    Layout.topMargin: 60
-                    Layout.leftMargin: 25
-
-                    RowLayout {
-                        anchors.fill: parent
-
-                        Button{
-                            id: switch_splay
-                            text: "Splay Tree"
-                            font.pointSize: 15
-                            background: Rectangle{
-                                implicitWidth: 100
-                                implicitHeight: 30
-                                radius: 6
-                            }
-                            onClicked: datatext.text = "im splay"
-                        }
-                        Button{
-                            id: switch_minheap
-                            text: "Minheap"
-                            font.pointSize: 15
-                            background: Rectangle{
-                                implicitWidth: 100
-                                implicitHeight: 30
-                                radius: 6
-                            }
-                            onClicked: datatext.text = "im minheap"
-                        }
-                    }
-                }
                 ColumnLayout{
                     spacing: 0
                     Layout.topMargin: 10
                     Layout.alignment: Qt.AlignHCenter
+                    ButtonGroup{
+                        id: switch_button_group
+                        buttons: button_row.children
+                        exclusive: true
+                    }
+                    Row {
+                        id: button_row
+                        //anchors.fill: parent
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.topMargin: 30
+
+                        Button{
+                            id: switch_splay
+                            Text{
+                                color: "black"
+                                text: "Splay Tree"
+                                font.pointSize: 12
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            checkable: true
+                            checked: true
+                            background: Rectangle{
+                                color: switch_splay.checked ? lightergreen : "white"
+                                implicitWidth: 125
+                                implicitHeight: 25
+                            }
+                            onClicked:{
+                                fe_functions.toggleSplay()
+                                datatext.text = fe_functions.getText();
+                            }
+                        }
+                        Button{
+                            id: switch_minheap
+                            Text{
+                                color: "black"
+                                text: "Minheap"
+                                font.pointSize: 12
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            onClicked: fe_functions.toggleMin()
+
+                            checkable: true
+                            background: Rectangle{
+                                color: switch_minheap.checked ? lightergreen : "white"
+                                implicitWidth: switch_splay.implicitWidth
+                                implicitHeight: switch_splay.implicitHeight
+                            }
+                        }
+                    }
+
                     Rectangle{
                         width: 250; height: 30
                         color: lightgray
                         id: time_box
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
                         MouseArea{
                             anchors.fill: parent
                         }
                         Text{
                             id: timetxt
                             font.pointSize: 15
+                            font.bold: true
                             text: "TIME: "
                         }
                     }
 
                     Rectangle{
-                        width: 250; height: 300
+                        height: 350
+                        width: time_box.width
                         color: "white"
                         id: container
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
@@ -166,7 +180,7 @@ ApplicationWindow {
                         Text{
                             id: datatext
                             font.pointSize: 12
-                            text: "absdkfs"
+                            text: fe_functions.getText()
                         }
                     }
                 }

@@ -3,8 +3,11 @@ cmake_minimum_required(VERSION 3.16)
 project(encounter_calculator VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 qt_standard_project_setup(REQUIRES 6.10)
 
@@ -13,14 +16,20 @@ if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/importedcontent/CMakeLists.txt")
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/importedcontent)
 endif()
 
+
 qt_add_executable(appencounter_calculator
     main.cpp
+    mapimages.qrc
 )
 
 qt_add_qml_module(appencounter_calculator
     URI encounter_calculator
     QML_FILES
         Main.qml
+    RESOURCES
+        mapimages.qrc
+    SOURCES
+    frontend_functions.h frontend_functions.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -37,6 +46,7 @@ set_target_properties(appencounter_calculator PROPERTIES
 target_link_libraries(appencounter_calculator
     PRIVATE Qt6::Quick
 )
+target_link_libraries(appencounter_calculator PRIVATE Qt6::Widgets)
 
 install(TARGETS appencounter_calculator
     BUNDLE DESTINATION .
