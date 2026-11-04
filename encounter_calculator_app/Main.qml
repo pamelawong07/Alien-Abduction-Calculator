@@ -59,7 +59,7 @@ ApplicationWindow {
 
                 Button{
                     id: credits_button
-                    Layout.alignment: Qt.AlignRight| Qt.AlignTop
+                    Layout.alignment: Qt.AlignRight
                     text: "Credits"
                     x:parent.width-20
                     y:parent.height-20
@@ -92,7 +92,11 @@ ApplicationWindow {
                         implicitHeight: 36
                         radius: 8
                     }
-                    onClicked: datatext.text = "hey"
+                    onClicked: {
+                        fe_functions.getData();
+                        datatext.text = fe_functions.getText();
+                        timetxt.text = fe_functions.getTime();
+                    }
                 }
                 ColumnLayout{
                     spacing: 0
@@ -129,6 +133,7 @@ ApplicationWindow {
                             onClicked:{
                                 fe_functions.toggleSplay()
                                 datatext.text = fe_functions.getText();
+                                timetxt.text = fe_functions.getTime();
                             }
                         }
                         Button{
@@ -141,7 +146,11 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
-                            onClicked: fe_functions.toggleMin()
+                            onClicked: {
+                                fe_functions.toggleMin()
+                                datatext.text = fe_functions.getText();
+                                timetxt.text = fe_functions.getTime();
+                            }
 
                             checkable: true
                             background: Rectangle{
@@ -164,7 +173,7 @@ ApplicationWindow {
                             id: timetxt
                             font.pointSize: 15
                             font.bold: true
-                            text: "TIME: "
+                            text: fe_functions.getTime();
                         }
                     }
 
