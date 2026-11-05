@@ -4,17 +4,17 @@
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+   QGuiApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
-    QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreationFailed,
-        &app,
-        []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
-    engine.loadFromModule("encounter_calculator", "Main");
+   QQmlApplicationEngine engine;
+   QObject::connect(
+       &engine,
+       &QQmlApplicationEngine::objectCreationFailed,
+       &app,
+       []() { QCoreApplication::exit(-1); },
+       Qt::QueuedConnection);
+   engine.loadFromModule("encounter_calculator", "Main");
     app.setWindowIcon(QIcon(":/img/images/2195316-alien.jpg"));
 
-    return QGuiApplication::exec();
+   return QGuiApplication::exec();
 }
