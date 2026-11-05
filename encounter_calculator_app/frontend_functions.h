@@ -11,10 +11,15 @@ class Frontend_functions : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
-    int textCounter = 1;
-    bool splay_min = 0;     //0: splay 1: minheap
+    int textCounter;
+    bool splay_min;     //0: splay 1: minheap
     vector<string> splaydata;
     vector<string> mindata;
+    float mintime;
+    float splaytime;
+    string curr_city;
+    int num_encounters;
+    int total_encounters;
 public:
     //constructor
     explicit Frontend_functions(QObject *parent = nullptr);
@@ -22,6 +27,9 @@ public:
     Q_INVOKABLE void getData();
     //gets current text (report) to be shown in box
     Q_INVOKABLE QString getText();
+    //gets time to display
+    Q_INVOKABLE QString getTime();
+    Q_INVOKABLE void toggleCounter(bool direction);
     Q_INVOKABLE void toggleSplay();
     Q_INVOKABLE void toggleMin();
 signals:

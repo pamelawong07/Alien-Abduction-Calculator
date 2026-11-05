@@ -59,20 +59,21 @@ ApplicationWindow {
 
                 Button{
                     id: credits_button
-                    Layout.alignment: Qt.AlignRight| Qt.AlignTop
+                    Layout.alignment: Qt.AlignRight
                     text: "Credits"
                     x:parent.width-20
                     y:parent.height-20
                     background: Rectangle{
                         color:"white"
                     }
+                    onClicked: credits_window.show()
                 }
                 Button{
                     id: submit_new
                     text: "Submit new sighting"
                     font.pointSize: 15
                     font.bold: true
-                    Layout.topMargin: 20
+                    Layout.topMargin: 10
                     Layout.alignment: Qt.AlignHCenter| Qt.AlignTop
                     background: Rectangle{
                         color: aliengreen
@@ -92,11 +93,27 @@ ApplicationWindow {
                         implicitHeight: 36
                         radius: 8
                     }
-                    onClicked: datatext.text = "hey"
+                    onClicked: {
+                        fe_functions.getData();
+                        datatext.text = fe_functions.getText();
+                        timetxt.text = fe_functions.getTime();
+                    }
+                }
+                ComboBox{
+                    id: city_picker
+                    Layout.alignment: Qt.AlignHCenter
+                    model: ListModel{
+                        id: city_list
+                        ListElement{text:"Select a state to choose a city..."}
+                    }
+                    background: Rectangle{
+                        color: "white"
+                        implicitWidth: 220
+                    }
+
                 }
                 ColumnLayout{
                     spacing: 0
-                    Layout.topMargin: 10
                     Layout.alignment: Qt.AlignHCenter
                     ButtonGroup{
                         id: switch_button_group
@@ -107,13 +124,13 @@ ApplicationWindow {
                         id: button_row
                         //anchors.fill: parent
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.topMargin: 30
 
                         Button{
                             id: switch_splay
                             Text{
                                 color: "black"
                                 text: "Splay Tree"
+                                leftPadding: 5
                                 font.pointSize: 12
                                 font.bold: true
                                 horizontalAlignment: Text.AlignHCenter
@@ -129,6 +146,7 @@ ApplicationWindow {
                             onClicked:{
                                 fe_functions.toggleSplay()
                                 datatext.text = fe_functions.getText();
+                                timetxt.text = fe_functions.getTime();
                             }
                         }
                         Button{
@@ -136,12 +154,17 @@ ApplicationWindow {
                             Text{
                                 color: "black"
                                 text: "Minheap"
+                                leftPadding: 5
                                 font.pointSize: 12
                                 font.bold: true
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
-                            onClicked: fe_functions.toggleMin()
+                            onClicked: {
+                                fe_functions.toggleMin()
+                                datatext.text = fe_functions.getText();
+                                timetxt.text = fe_functions.getTime();
+                            }
 
                             checkable: true
                             background: Rectangle{
@@ -162,14 +185,15 @@ ApplicationWindow {
                         }
                         Text{
                             id: timetxt
+                            leftPadding: 5
                             font.pointSize: 15
                             font.bold: true
-                            text: "TIME: "
+                            text: fe_functions.getTime();
                         }
                     }
 
                     Rectangle{
-                        height: 350
+                        height: 320
                         width: time_box.width
                         color: "white"
                         id: container
@@ -179,8 +203,41 @@ ApplicationWindow {
                         }
                         Text{
                             id: datatext
+                            width: parent.width
+                            rightPadding: 5
+                            leftPadding: 5
+                            topPadding: 5
                             font.pointSize: 12
                             text: fe_functions.getText()
+                            wrapMode: Text.WordWrap
+                        }
+                    }
+                    Row{
+                        Button{
+                            id: toggle_left
+                            width:container.width/2
+                            text: "<<"
+                            font.bold: true
+                            background: Rectangle{
+                                color: lightgray
+                            }
+                            onClicked: {
+                                fe_functions.toggleCounter(0);
+                                datatext.text = fe_functions.getText();
+                            }
+                        }
+                        Button{
+                            id: toggle_right
+                            width:container.width/2
+                            text: ">>"
+                            font.bold: true
+                            background: Rectangle{
+                                color: lightgray
+                            }
+                            onClicked: {
+                                fe_functions.toggleCounter(1);
+                                datatext.text = fe_functions.getText();
+                            }
                         }
                     }
                 }
@@ -188,5 +245,31 @@ ApplicationWindow {
         }
     }
 
+    Window{
+        id: credits_window
+        title: "Credits"
+        visible: false
+        width: 400
+        height: 400
+        minimumWidth: 400
+        minimumHeight: 400
+        maximumWidth: 400
+        maximumHeight: 400
+        TextArea{
+            width: parent.width
+            leftPadding: 5
+                text: "Sources for all non-original resources are credited below.\n" +
+                      "\nApp icon: \ncosmin4000/Getty Images/Alien\n" +
+                      "\nUS Map clipart/buttons: \nGisGeography (https://gisgeography.com/state-outlines-blank-maps-united-states/)\n" +
+                      "\nCity dataset (population, location data):\nSimpleMaps (https://simplemaps.com/data/us-cities)\n" +
+                      "\nAlien encounter dataset: CORGIS (https://corgis-edu.github.io/corgis/json/ufo_sightings/)\n" +
+                      "\n\nMade by: \n" +
+                      "Pamela Wong (Frontend)\n" +
+                      "Miaohan Lin (Data management, backend (minheap))\n" +
+                      "Orion Borrell-Jones (Backend (splay tree))"
+            selectByMouse: true
+            readOnly: true
+            wrapMode: Text.Wrap
+        }
+    }
 }
-
